@@ -29,15 +29,15 @@ class MyUser(AbstractUser):
         max_length=150,
     )
     subscribe = models.ManyToManyField(
-        'self',
+        to='self',
         verbose_name='Подписка',
-        related_name='subscribes',
+        related_name='subscribers',
         symmetrical=False,
     )
 
     class Meta:
-        verbose_name = 'Пользователь',
-        verbose_name_plural = 'Пользователи',
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
         ordering = ('username', )
 
     def __str__(self):
