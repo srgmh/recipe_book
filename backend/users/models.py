@@ -4,7 +4,7 @@ from django.db import models
 from .validators import validate_username
 
 
-class MyUser(AbstractUser):
+class User(AbstractUser):
     username = models.CharField(
         max_length=150,
         unique=True,
@@ -39,13 +39,13 @@ class MyUser(AbstractUser):
 
 class Follow(models.Model):
     user = models.ForeignKey(
-        MyUser,
+        User,
         on_delete=models.CASCADE,
         related_name="follower",
         verbose_name="Пользователь",
     )
     author = models.ForeignKey(
-        MyUser,
+        User,
         on_delete=models.CASCADE,
         related_name="following",
         verbose_name="Автор",

@@ -1,18 +1,12 @@
 from django.core import validators
 from django.db import models
-from users.models import MyUser
-
-ORANGE = "#E26C2D"
-GREEN = "#49B64E"
-PURPLE = "#8775D2"
-
-CHOICES = ((ORANGE, "оранжевый"), (GREEN, "зелёный"), (PURPLE, "фиолетовый"))
+from users.models import User
 
 
 class Tag(models.Model):
     name = models.CharField("Тэг", max_length=200, unique=True, blank=False)
     color = models.CharField(
-        "Цвет тэга", max_length=7, choices=CHOICES, unique=True, blank=False
+        "Цвет тэга", max_length=7, unique=True, blank=False
     )
     slug = models.SlugField(
         "Slug тэга", max_length=200, unique=True, blank=False
@@ -42,7 +36,7 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     author = models.ForeignKey(
-        MyUser,
+        User,
         on_delete=models.CASCADE,
         related_name="recipe",
         verbose_name="Автор",
@@ -108,7 +102,7 @@ class AmountIngredient(models.Model):
 
 class FavoriteRecipe(models.Model):
     user = models.ForeignKey(
-        MyUser,
+        User,
         on_delete=models.CASCADE,
         related_name="favorite_user",
         verbose_name="Пользователь",
@@ -134,7 +128,7 @@ class FavoriteRecipe(models.Model):
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
-        MyUser,
+        User,
         on_delete=models.CASCADE,
         related_name="shopping_cart_user",
         verbose_name="Пользователь",
