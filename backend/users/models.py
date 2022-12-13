@@ -1,41 +1,62 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from .validators import validate_username
+
 
 class MyUser(AbstractUser):
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        blank=False,
+        null=False,
+        validators=(validate_username,),
+    )
     email = models.EmailField(
-        verbose_name='Адрес электронной почты',
+        "Электронная почта",
         max_length=254,
         unique=True,
-    )
-    username = models.CharField(
-        verbose_name='Уникальный логин',
-        max_length=150,
-        unique=True,
+        blank=False,
+        null=False,
     )
     first_name = models.CharField(
-        verbose_name='Имя пользователя',
-        max_length=150,
+        "Имя пользователя", max_length=150, blank=True
     )
     last_name = models.CharField(
-        verbose_name='Фамилия пользователя',
-        max_length=150,
+        "Фамилия пользователя", max_length=150, blank=True
     )
-    password = models.CharField(
-        verbose_name='Пароль',
-        max_length=150,
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "пользователи"
+
+    def __str__(self):
+        return self.email
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        MyUser,
+        on_delete=models.CASCADE,
+        related_name="follower",
+        verbose_name="Пользователь",
     )
-    subscribe = models.ManyToManyField(
-        to='self',
-        verbose_name='Подписка',
-        related_name='subscribers',
-        symmetrical=False,
+    author = models.ForeignKey(
+        MyUser,
+        on_delete=models.CASCADE,
+        related_name="following",
+        verbose_name="Автор",
     )
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-        ordering = ('username', )
-
-    def __str__(self):
-        return f'Логин: {self.username}, почта: {self.email}'
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "author"],
+                name="unique_subscription",
+            )
+        ]
