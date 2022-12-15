@@ -132,12 +132,13 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         return data
 
     def create_amount_ingredients(self, ingredients, recipe):
-        for ingredient in ingredients:
-            AmountIngredient.objects.create(
+        AmountIngredient.objects.bulk_create(
+            [AmountIngredient(
                 recipe=recipe,
                 ingredient=ingredient.get("id"),
                 amount=ingredient.get("amount"),
-            )
+            ) for ingredient in ingredients]
+        )
 
     def create(self, validated_data):
         ingredients = validated_data.pop("ingredients")
