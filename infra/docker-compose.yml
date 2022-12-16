@@ -18,19 +18,13 @@ services:
       - ../frontend/:/app/result_build/
 
   backend:
-    image: srgmh/foodgram_backend:v1
-    restart: always
-    command: >
-      bash -c "python manage.py migrate &&
-      python manage.py collectstatic --noinput &&
-      gunicorn --bind 0:8000 foodgram.wsgi"
+    image: srgmh/foodgram_backend:v5
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
       - db
-    env_file:
-      - ./.env
+
 
   nginx:
     image: nginx:1.19.3
