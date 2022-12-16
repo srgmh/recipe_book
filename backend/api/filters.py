@@ -30,14 +30,3 @@ class RecipeFilter(FilterSet):
                 shopping_cart_recipe__user=self.request.user
             )
         return queryset
-
-
-class IngredientFilter(FilterSet):
-    name = filters.CharFilter(
-        field_name='name',
-        lookup_expr='istartswith'
-    )
-
-    class Meta:
-        model = Ingredient
-        fields = ('name', 'measurement_unit')

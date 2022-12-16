@@ -5,13 +5,13 @@ from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from recipes.models import (AmountIngredient, FavoriteRecipe, Ingredient,
                             Recipe, ShoppingCart, Tag)
-from rest_framework import status, viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 from users.models import Follow, User
 
-from .filters import IngredientFilter, RecipeFilter
+from .filters import RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (FavoriteOrShoppingRecipeSerializer, FollowSerializer,
                           IngredientSerializer, RecipesCreateSerializer,
@@ -25,10 +25,11 @@ class TagsViewSet(viewsets.ModelViewSet):
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
+    pagination_class = None
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    pagination_class = None
-    filter_class = IngredientFilter
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('^name', )
 
 
 class UsersViewSet(UserViewSet):
