@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-POSTGRESQL_DB = False
+POSTGRESQL_DB = True
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
