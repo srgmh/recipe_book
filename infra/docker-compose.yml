@@ -13,12 +13,12 @@ services:
       - ./.env
 
   frontend:
-    image: srgmh/foodgram_front:latest
+    image: srgmh/foodgram_front:v1
     volumes:
       - ../frontend/:/app/result_build/
 
   backend:
-    image: srgmh/foodgram_backend:latest
+    image: srgmh/foodgram_backend:v1
     restart: always
     command: >
       bash -c "python manage.py migrate &&
