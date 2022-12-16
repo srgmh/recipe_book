@@ -1,16 +1,13 @@
 from drf_base64.fields import Base64ImageField
-from rest_framework import serializers
-
-from recipes.models import (
-    AmountIngredient,
-    Ingredient,
-    Recipe,
-    Tag,
-)
+from recipes.models import AmountIngredient, Ingredient, Recipe, Tag
+from rest_framework.serializers import (BooleanField, CurrentUserDefault,
+                                        IntegerField, ModelSerializer,
+                                        PrimaryKeyRelatedField, ReadOnlyField,
+                                        SerializerMethodField, ValidationError)
 from users.models import Follow, User
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer(ModelSerializer):
     class Meta:
         model = Tag
         fields = (
@@ -21,14 +18,14 @@ class TagSerializer(serializers.ModelSerializer):
         )
 
 
-class IngredientSerializer(serializers.ModelSerializer):
+class IngredientSerializer(ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ("id", "name", "measurement_unit")
 
 
-class UserSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+class UserSerializer(ModelSerializer):
+    is_subscribed = SerializerMethodField()
 
     class Meta:
         model = User
@@ -49,10 +46,10 @@ class UserSerializer(serializers.ModelSerializer):
         return Follow.objects.filter(user=user, author=obj).exists()
 
 
-class AmountIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source="ingredient.id")
-    name = serializers.ReadOnlyField(source="ingredient.name")
-    measurement_unit = serializers.ReadOnlyField(
+class AmountIngredientSerializer(ModelSerializer):
+    id = ReadOnlyField(source="ingredient.id")
+    name = ReadOnlyField(source="ingredient.name")
+    measurement_unit = ReadOnlyField(
         source="ingredient.measurement_unit"
     )
 
@@ -66,9 +63,9 @@ class AmountIngredientSerializer(serializers.ModelSerializer):
         )
 
 
-class AddAmountIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
-    amount = serializers.IntegerField()
+class AddAmountIngredientSerializer(ModelSerializer):
+    id = PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+    amount = IntegerField()
 
     class Meta:
         model = AmountIngredient
@@ -78,16 +75,16 @@ class AddAmountIngredientSerializer(serializers.ModelSerializer):
         )
 
 
-class RecipesListSerializer(serializers.ModelSerializer):
+class RecipesListSerializer(ModelSerializer):
     tags = TagSerializer(many=True)
     author = UserSerializer(
-        read_only=True, default=serializers.CurrentUserDefault()
+        read_only=True, default=CurrentUserDefault()
     )
     ingredients = AmountIngredientSerializer(
         many=True, required=True, source="recipe"
     )
-    is_favorited = serializers.BooleanField(read_only=True)
-    is_in_shopping_cart = serializers.BooleanField(read_only=True)
+    is_favorited = BooleanField(read_only=True)
+    is_in_shopping_cart = BooleanField(read_only=True)
     image = Base64ImageField()
 
     class Meta:
@@ -106,9 +103,9 @@ class RecipesListSerializer(serializers.ModelSerializer):
         )
 
 
-class RecipesCreateSerializer(serializers.ModelSerializer):
+class RecipesCreateSerializer(ModelSerializer):
     ingredients = AddAmountIngredientSerializer(many=True)
-    tags = serializers.PrimaryKeyRelatedField(
+    tags = PrimaryKeyRelatedField(
         queryset=Tag.objects.all(), many=True
     )
     image = Base64ImageField()
@@ -124,7 +121,7 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         for ingredient_data in ingredients:
             current_ingredient = ingredient_data["id"]
             if current_ingredient in unique_set:
-                raise serializers.ValidationError(
+                raise ValidationError(
                     "В списке ингредиентов - два одинаковых значения."
                     " Проверьте состав."
                 )
@@ -163,7 +160,7 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class FavoriteOrShoppingRecipeSerializer(serializers.ModelSerializer):
+class FavoriteOrShoppingRecipeSerializer(ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
@@ -174,15 +171,15 @@ class FavoriteOrShoppingRecipeSerializer(serializers.ModelSerializer):
         )
 
 
-class FollowSerializer(serializers.ModelSerializer):
-    email = serializers.ReadOnlyField(source="author.email")
-    id = serializers.ReadOnlyField(source="author.id")
-    username = serializers.ReadOnlyField(source="author.username")
-    first_name = serializers.ReadOnlyField(source="author.first_name")
-    last_name = serializers.ReadOnlyField(source="author.last_name")
-    is_subscribed = serializers.SerializerMethodField()
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.SerializerMethodField()
+class FollowSerializer(ModelSerializer):
+    email = ReadOnlyField(source="author.email")
+    id = ReadOnlyField(source="author.id")
+    username = ReadOnlyField(source="author.username")
+    first_name = ReadOnlyField(source="author.first_name")
+    last_name = ReadOnlyField(source="author.last_name")
+    is_subscribed = SerializerMethodField()
+    recipes = SerializerMethodField()
+    recipes_count = SerializerMethodField()
 
     class Meta:
         model = User

@@ -1,34 +1,21 @@
-from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django.db.models.expressions import Exists, OuterRef
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
+from recipes.models import (AmountIngredient, FavoriteRecipe, Ingredient,
+                            Recipe, ShoppingCart, Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
+from users.models import Follow, User
 
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (
-    FavoriteOrShoppingRecipeSerializer,
-    FollowSerializer,
-    IngredientSerializer,
-    RecipesCreateSerializer,
-    RecipesListSerializer,
-    TagSerializer,
-    UserSerializer,
-)
-from users.models import Follow, User
-from recipes.models import (
-    AmountIngredient,
-    FavoriteRecipe,
-    Ingredient,
-    Recipe,
-    ShoppingCart,
-    Tag,
-)
+from .serializers import (FavoriteOrShoppingRecipeSerializer, FollowSerializer,
+                          IngredientSerializer, RecipesCreateSerializer,
+                          RecipesListSerializer, TagSerializer, UserSerializer)
 
 
 class TagsViewSet(viewsets.ModelViewSet):
@@ -150,7 +137,9 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 model.objects.create(
                     user=self.request.user, recipe=recipe
                 )
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_201_CREATED)
         elif request.method == "DELETE":
             if model.objects.filter(
                 user=self.request.user, recipe=recipe
@@ -171,14 +160,16 @@ class RecipesViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,),
     )
     def favorite(self, request, **kwargs):
-        return self.post_delete_recipe(request, self.kwargs.get("pk"), FavoriteRecipe)
+        return self.post_delete_recipe(
+            request, self.kwargs.get("pk"), FavoriteRecipe)
 
     @action(
         methods=["POST", "DELETE"],
         detail=True,
     )
     def shopping_cart(self, request, **kwargs):
-        return self.post_delete_recipe(request, self.kwargs.get("pk"), ShoppingCart)
+        return self.post_delete_recipe(
+            request, self.kwargs.get("pk"), ShoppingCart)
 
     @action(
         methods=["GET"], detail=False, permission_classes=(IsAuthenticated,)
