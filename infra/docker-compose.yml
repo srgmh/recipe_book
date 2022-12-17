@@ -18,7 +18,7 @@ services:
       - ../frontend/:/app/result_build/
 
   backend:
-    image: srgmh/foodgram_backend:v9
+    image: srgmh/foodgram_backend:v1
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
