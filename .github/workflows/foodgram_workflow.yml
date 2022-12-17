@@ -50,7 +50,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           no-cache: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_front:v2
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
   deploy:
       if: github.ref == 'refs/heads/master'
       runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
             script: |
               cd infra/
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
-              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_front:v2
+              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
               sudo docker-compose stop
               sudo docker-compose rm backend
               sudo rm .env

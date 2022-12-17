@@ -13,7 +13,7 @@ services:
       - ./.env
 
   frontend:
-    image: srgmh/foodgram_front:v2
+    image: srgmh/foodgram_frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
 
