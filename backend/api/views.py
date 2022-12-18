@@ -11,7 +11,6 @@ from rest_framework.response import Response
 from recipes.models import (AmountIngredient, FavoriteRecipe, Ingredient,
                             Recipe, ShoppingCart, Tag)
 from users.models import Follow, User
-
 from .filters import RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (FavoriteOrShoppingRecipeSerializer, FollowSerializer,
