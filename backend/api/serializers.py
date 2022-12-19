@@ -203,9 +203,14 @@ class FollowSerializer(ModelSerializer):
         return Follow.objects.filter(user=obj.user, author=obj.author).exists()
 
     def get_recipes(self, obj):
-        queryset = Recipe.objects.filter(author=obj.author).order_by(
-            "-pub_date"
-        )
+        recipes_limit = self.context.get('recipes_limit')
+        if recipes_limit is not None:
+            recipes_limit = int(self.context.get('recipes_limit'))
+            queryset = Recipe.objects.filter(author=obj)[:recipes_limit]
+        else:
+            queryset = Recipe.objects.filter(author=obj.author).order_by(
+                "-pub_date"
+            )
         return FavoriteOrShoppingRecipeSerializer(queryset, many=True).data
 
     def get_recipes_count(self, obj):
