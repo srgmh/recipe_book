@@ -216,10 +216,12 @@ class FollowSerializer(ModelSerializer):
         else:
             return False
         if recipes_limit is not None:
-            queryset = Recipe.objects.filter(author=obj.author)[:int(recipes_limit)]
+            queryset = Recipe.objects.filter(
+                author=obj.author)[:int(recipes_limit)]
         else:
             queryset = Recipe.objects.filter(author=obj.author)
-        return FavoriteOrShoppingRecipeSerializer(queryset, many=True, context=context).data
+        return FavoriteOrShoppingRecipeSerializer(
+            queryset, many=True, context=context).data
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj.author).count()
