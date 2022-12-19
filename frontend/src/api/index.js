@@ -318,7 +318,7 @@ class Api {
   getIngredients ({ name }) {
     const token = localStorage.getItem('token')
     return fetch(
-      `/api/ingredients/?search=${name}`,
+      `/api/ingredients/?name=${name}`,
       {
         method: 'GET',
         headers: {

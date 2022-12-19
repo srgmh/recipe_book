@@ -121,6 +121,10 @@ class RecipesCreateSerializer(ModelSerializer):
         unique_set = set()
         for ingredient_data in ingredients:
             current_ingredient = ingredient_data["id"]
+            if int(ingredient_data.get('amount')) <= 0:
+                raise ValidationError(
+                    "Количество ингредиента должно быть больше нуля!"
+                )
             if current_ingredient in unique_set:
                 raise ValidationError(
                     "В списке ингредиентов - два одинаковых значения."

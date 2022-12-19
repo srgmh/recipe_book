@@ -3,7 +3,7 @@ from django.db.models.expressions import Exists, OuterRef
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from rest_framework import filters, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from recipes.models import (AmountIngredient, FavoriteRecipe, Ingredient,
                             Recipe, ShoppingCart, Tag)
 from users.models import Follow, User
-from .filters import RecipeFilter
+from .filters import IngredientSearchFilter, RecipeFilter
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (FavoriteOrShoppingRecipeSerializer, FollowSerializer,
                           IngredientSerializer, RecipesCreateSerializer,
@@ -25,11 +25,11 @@ class TagsViewSet(viewsets.ModelViewSet):
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
-    pagination_class = None
-    queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (filters.SearchFilter, )
-    search_fields = ('^name', )
+    filter_backends = (IngredientSearchFilter, )
+    queryset = Ingredient.objects.all()
+    search_fields = ('^name',)
+    pagination_class = None
 
 
 class UsersViewSet(UserViewSet):
