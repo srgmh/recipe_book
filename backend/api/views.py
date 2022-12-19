@@ -2,6 +2,7 @@ from django.db.models import Sum
 from django.db.models.expressions import Exists, OuterRef
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -85,7 +86,8 @@ class UsersViewSet(UserViewSet):
 
 class RecipesViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    filter_class = RecipeFilter
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = RecipeFilter
     permission_classes = (IsOwnerOrReadOnly,)
 
     def get_serializer_class(self):
