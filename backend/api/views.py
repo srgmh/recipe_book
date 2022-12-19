@@ -13,7 +13,6 @@ from recipes.models import (AmountIngredient, FavoriteRecipe, Ingredient,
                             Recipe, ShoppingCart, Tag)
 from users.models import Follow, User
 from .filters import IngredientSearchFilter, RecipeFilter
-from .pagination import PageLimitPagination
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (FavoriteOrShoppingRecipeSerializer, FollowSerializer,
                           IngredientSerializer, RecipesCreateSerializer,
@@ -39,10 +38,7 @@ class UsersViewSet(UserViewSet):
     serializer_class = UserSerializer
 
     @action(
-        methods=["GET"],
-        detail=False,
-        permission_classes=(IsAuthenticated,),
-        pagination_class=PageLimitPagination,
+        methods=["GET"], detail=False, permission_classes=(IsAuthenticated,)
     )
     def subscriptions(self, request):
         user = self.request.user
