@@ -76,6 +76,7 @@ jobs:
               echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
               echo DB_HOST=${{ secrets.DB_HOST }} >> .env
               echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+              echo HELLO=HELLO >> .env
               
               sudo docker-compose stop
               sudo docker rm foodgram_frontend_1
