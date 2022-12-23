@@ -1,7 +1,7 @@
 # FOODGRAM
 ![Workflow stat](https://github.com/srgmh/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 ***
-Автор: [Sergey Mankevich](https://github.com/Xewus)
+Автор: [Sergey Mankevich](https://github.com/srgmh)
 ***
 
 ## Технологии:
