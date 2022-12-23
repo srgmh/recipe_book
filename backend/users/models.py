@@ -13,25 +13,25 @@ class User(AbstractUser):
         validators=(validate_username,),
     )
     email = models.EmailField(
-        "Электронная почта",
+        'Электронная почта',
         max_length=254,
         unique=True,
         blank=False,
         null=False,
     )
     first_name = models.CharField(
-        "Имя пользователя", max_length=150, blank=True
+        'Имя пользователя', max_length=150, blank=True
     )
     last_name = models.CharField(
-        "Фамилия пользователя", max_length=150, blank=True
+        'Фамилия пользователя', max_length=150, blank=True
     )
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "пользователи"
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'пользователи'
 
     def __str__(self):
         return self.email
@@ -41,22 +41,22 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="follower",
-        verbose_name="Пользователь",
+        related_name='follower',
+        verbose_name='Пользователь',
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="following",
-        verbose_name="Автор",
+        related_name='following',
+        verbose_name='Автор',
     )
 
     class Meta:
-        verbose_name = "Подписка"
-        verbose_name_plural = "Подписки"
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "author"],
-                name="unique_subscription",
+                fields=['user', 'author'],
+                name='unique_subscription',
             )
         ]
