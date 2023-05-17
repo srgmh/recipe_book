@@ -1,11 +1,11 @@
-# FOODGRAM
+# RECIPE BOOK
 ![Workflow stat](https://github.com/srgmh/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 ***
 
 ## Описание:
 
-Продуктовый помощник FOODGRAM представляет собой api-сервис со следующими возможностями:
+Продуктовый помощник RECIPE BOOK представляет собой api-сервис со следующими возможностями:
 
 - Регистрация пользователей;
 - Создание, Изменение, Удаление рецептов;
@@ -20,13 +20,13 @@
 - Автор проекта: Sergey Mankevich [(LinkedIn)](https://www.linkedin.com/in/sergey-mankevich/) [(Telegram)](https://t.me/srgmh)
 
 #### Ссылка на API-приложение:
-- http://62.84.121.139/api/
+- http://HOST/api/
 
 #### Ссылка на фронтенд приложения:
-- http://62.84.121.139/
+- http://HOST/
 
 #### Ссылка на документацию по работе c API:
-- http://62.84.121.139/api/docs/redoc.html
+- http://HOST/api/docs/redoc.html
 
 ***
 
@@ -50,7 +50,7 @@
 
 - Клонировать репозиторий на компьютер:
 ```
-git clone https://github.com/srgmh/foodgram-project-react.git
+git clone https://github.com/srgmh/recipe_book.git
 ```
 - Создать виртуальное окружение:
 ```
